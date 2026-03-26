@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discussions — Algo Arena</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .page { padding-top: 64px; }
+    .page-header {
+      padding: 3rem 2.5rem 2rem;
+      background: linear-gradient(180deg, #0d1422 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
+    }
+
+    .search-bar {
+      display: flex; gap: .75rem; align-items: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: .6rem 1rem; width: 300px; transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: var(--accent); }
+    .search-bar input {
+      background: transparent; border: none; outline: none;
+      color: var(--text); font-size: .875rem; font-family: 'Inter', sans-serif; width: 100%;
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+
+    .filter-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.25rem; }
+    .filter-chip {
+      padding: .3rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      cursor: pointer; border: 1px solid var(--border); color: var(--muted);
+      background: transparent; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: rgba(0,229,160,.1); border-color: rgba(0,229,160,.4); color: var(--accent);
+    }
+
+    /* LAYOUT */
+    .disc-layout {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2.5rem;
+      display: grid; grid-template-columns: 1fr 300px; gap: 2rem;
+    }
+
+    /* THREAD LIST */
+    .thread-list { display: flex; flex-direction: column; gap: .75rem; }
+
+    .thread-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+      display: flex; gap: 1.25rem; align-items: flex-start;
+      text-decoration: none; color: inherit; transition: all .2s;
+    }
+    .thread-card:hover { border-color: rgba(0,229,160,.25); background: var(--surface2); transform: translateX(3px); }
+    .thread-card.pinned { border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.03); }
+
+    .vote-stack {
+      display: flex; flex-direction: column; align-items: center; gap: .2rem;
+      min-width: 44px; padding-top: .2rem;
+    }
+    .vote-num {
+      font-family: 'Space Mono', monospace; font-size: .95rem; font-weight: 700;
+      color: var(--text);
+    }
+    .vote-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .answers-stack {
+      display: flex; flex-direction: column; align-items: center; gap: .2rem; min-width: 44px;
+    }
+    .answers-num {
+      font-family: 'Space Mono', monospace; font-size: .95rem; font-weight: 700;
+      color: var(--muted);
+    }
+    .answers-num.has-accepted { color: var(--accent); }
+
+    .thread-body { flex: 1; }
+    .thread-top { display: flex; align-items: flex-start; gap: .75rem; flex-wrap: wrap; margin-bottom: .4rem; }
+    .thread-title {
+      font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700;
+      flex: 1; line-height: 1.4;
+    }
+    .pinned-badge {
+      font-size: .65rem; font-family: 'Space Mono', monospace;
+      background: rgba(245,158,11,.15); color: #f59e0b;
+      padding: .15rem .5rem; border-radius: 4px; white-space: nowrap;
+    }
+    .thread-excerpt { font-size: .82rem; color: var(--muted); line-height: 1.55; margin-bottom: .6rem; }
+    .thread-meta {
+      display: flex; gap: 1rem; align-items: center; font-size: .72rem;
+      color: var(--muted); flex-wrap: wrap;
+    }
+    .author-chip {
+      display: flex; align-items: center; gap: .4rem; font-weight: 500; color: var(--text);
+    }
+    .author-avatar {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .6rem; font-weight: 700;
+    }
+    .tag-row { display: flex; gap: .3rem; margin-top: .5rem; flex-wrap: wrap; }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+    .sidebar-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .sidebar-head {
+      padding: .85rem 1.25rem; background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700;
+    }
+    .sidebar-body { padding: 1rem 1.25rem; }
+
+    .hot-topic {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid var(--border);
+    }
+    .hot-topic:last-child { border-bottom: none; }
+    .hot-num {
+      font-family: 'Space Mono', monospace; font-size: .75rem;
+      color: var(--muted); min-width: 18px; padding-top: 2px;
+    }
+    .hot-title {
+      font-size: .82rem; color: var(--text); text-decoration: none; line-height: 1.4;
+      transition: color .2s;
+    }
+    .hot-title:hover { color: var(--accent); }
+    .hot-stat { font-size: .7rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-top: .2rem; }
+
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .cloud-tag {
+      font-size: .72rem; padding: .25rem .6rem; border-radius: 99px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; text-decoration: none;
+      transition: all .2s;
+    }
+    .cloud-tag:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    @media (max-width: 900px) {
+      .disc-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="bracket">{</span>Algo Arena<span class="bracket">}</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="problems.html">Problems</a></li>
+    <li><a href="discussions.html" class="active">Discuss</a></li>
+    <li><a href="leaderboard.html">Leaderboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="btn btn-ghost">Log In</a>
+    <a href="login.html" class="btn btn-primary">Join Free</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div>
+        <div class="section-label">// Community Forum</div>
+        <h1 class="section-title" style="margin:0">Discussions</h1>
+        <p class="section-sub" style="margin-top:.5rem">8,241 threads · Ask questions, share solutions, get mentored</p>
+      </div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <div class="search-bar">
+          <span>🔍</span>
+          <input type="text" placeholder="Search discussions..."/>
+        </div>
+        <a href="login.html" class="btn btn-primary">+ Ask Question</a>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;padding:0 2.5rem 0">
+      <div class="filter-row">
+        <button class="filter-chip active">All</button>
+        <button class="filter-chip">Questions</button>
+        <button class="filter-chip">Solutions</button>
+        <button class="filter-chip">Concepts</button>
+        <button class="filter-chip">Interview Tips</button>
+        <button class="filter-chip">Unanswered</button>
+        <button class="filter-chip">Trending</button>
+        <button class="filter-chip">Newest</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="disc-layout">
+    <div>
+      <div class="thread-list">
+
+        <a href="#" class="thread-card pinned">
+          <div class="vote-stack">
+            <div class="vote-num">248</div>
+            <div class="vote-label">votes</div>
+          </div>
+          <div class="answers-stack">
+            <div class="answers-num has-accepted">32</div>
+            <div class="vote-label">answers</div>
+          </div>
+          <div class="thread-body">
+            <div class="thread-top">
+              <div class="thread-title">📌 [GUIDE] How to approach Dynamic Programming problems as a beginner</div>
+              <span class="pinned-badge">📌 Pinned</span>
+            </div>
+            <p class="thread-excerpt">DP is intimidating at first but there's a systematic framework. I'll walk you through identifying sub-problems, building memoization tables, and converting recursion to tabulation...</p>
+            <div class="tag-row">
+              <span class="tag">dynamic-programming</span><span class="tag">guide</span><span class="tag">beginner</span>
+            </div>
+            <div class="thread-meta">
+              <span class="author-chip"><div class="author-avatar" style="background:rgba(0,229,160,.15);color:var(--accent)">R</div> ravi_codes</div>
+              <span>3 days ago</span>
+              <span>👁 12.4K views</span>
+            </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="thread-card">
+          <div class="vote-stack"><div class="vote-num">89</div><div class="vote-label">votes</div></div>
+          <div class="answers-stack"><div class="answers-num has-accepted">14</div><div class="vote-label">answers</div></div>
+          <div class="thread-body">
+            <div class="thread-top"><div class="thread-title">Why does my BFS solution give TLE on large graphs? Need help optimizing</div></div>
+            <p class="thread-excerpt">My BFS for finding shortest path works on small inputs but times out on the judge. I'm using a plain list as the queue. Is that the problem? Here's my code...</p>
+            <div class="tag-row"><span class="tag">graph</span><span class="tag">BFS</span><span class="tag">optimization</span></div>
+            <div class="thread-meta">
+              <span class="author-chip"><div class="author-avatar" style="background:rgba(14,165,233,.15);color:var(--accent2)">D</div> deepak_learns</div>
+              <span>5 hours ago</span><span>👁 1.2K views</span>
+            </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="thread-card">
+          <div class="vote-stack"><div class="vote-num">76</div><div class="vote-label">votes</div></div>
+          <div class="answers-stack"><div class="answers-num">8</div><div class="vote-label">answers</div></div>
+          <div class="thread-body">
+            <div class="thread-top"><div class="thread-title">Understanding time complexity of recursive tree traversals</div></div>
+            <p class="thread-excerpt">I keep getting confused when calculating Big-O for recursive functions. For a balanced binary tree with n nodes, is inorder traversal truly O(n) or O(n log n)?</p>
+            <div class="tag-row"><span class="tag">tree</span><span class="tag">recursion</span><span class="tag">complexity</span></div>
+            <div class="thread-meta">
+              <span class="author-chip"><div class="author-avatar" style="background:rgba(245,158,11,.15);color:#f59e0b">S</div> sneha_algo</div>
+              <span>1 day ago</span><span>👁 3.8K views</span>
+            </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="thread-card">
+          <div class="vote-stack"><div class="vote-num">54</div><div class="vote-label">votes</div></div>
+          <div class="answers-stack"><div class="answers-num has-accepted">11</div><div class="vote-label">answers</div></div>
+          <div class="thread-body">
+            <div class="thread-top"><div class="thread-title">Two pointer vs sliding window — when to use which?</div></div>
+            <p class="thread-excerpt">Both seem similar but I can't figure out when to apply which pattern. Can someone explain the difference with concrete examples?</p>
+            <div class="tag-row"><span class="tag">two-pointer</span><span class="tag">sliding-window</span><span class="tag">patterns</span></div>
+            <div class="thread-meta">
+              <span class="author-chip"><div class="author-avatar" style="background:rgba(239,68,68,.15);color:#ef4444">A</div> arjun_cse</div>
+              <span>2 days ago</span><span>👁 5.1K views</span>
+            </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="thread-card">
+          <div class="vote-stack"><div class="vote-num">41</div><div class="vote-label">votes</div></div>
+          <div class="answers-stack"><div class="answers-num">3</div><div class="vote-label">answers</div></div>
+          <div class="thread-body">
+            <div class="thread-top"><div class="thread-title">Is Dijkstra's algorithm always better than BFS for weighted graphs?</div></div>
+            <p class="thread-excerpt">My professor said to always use Dijkstra for shortest path but I've seen solutions using BFS on Leetcode. What's the actual rule?</p>
+            <div class="tag-row"><span class="tag">graph</span><span class="tag">dijkstra</span><span class="tag">shortest-path</span></div>
+            <div class="thread-meta">
+              <span class="author-chip"><div class="author-avatar" style="background:rgba(0,229,160,.15);color:var(--accent)">M</div> meera_dev</div>
+              <span>4 days ago</span><span>👁 2.3K views</span>
+            </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="thread-card">
+          <div class="vote-stack"><div class="vote-num">33</div><div class="vote-label">votes</div></div>
+          <div class="answers-stack"><div class="answers-num has-accepted">7</div><div class="vote-label">answers</div></div>
+          <div class="thread-body">
+            <div class="thread-top"><div class="thread-title">[Solution] Trapping Rain Water — 3 approaches explained (brute → O(n))</div></div>
+            <p class="thread-excerpt">This problem trips up a lot of people. I'll share all three solutions from O(n²) brute force all the way to the elegant two-pointer O(1) space solution...</p>
+            <div class="tag-row"><span class="tag">array</span><span class="tag">two-pointer</span><span class="tag">solution</span></div>
+            <div class="thread-meta">
+              <span class="author-chip"><div class="author-avatar" style="background:rgba(0,229,160,.15);color:var(--accent)">R</div> ravi_codes</div>
+              <span>6 days ago</span><span>👁 7.9K views</span>
+            </span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-head">🔥 Hot This Week</div>
+        <div class="sidebar-body" style="padding:.5rem 1.25rem">
+          <div class="hot-topic">
+            <span class="hot-num">1</span>
+            <div><a href="#" class="hot-title">DP approach to Longest Increasing Subsequence</a><div class="hot-stat">▲ 248 · 32 answers</div></div>
+          </div>
+          <div class="hot-topic">
+            <span class="hot-num">2</span>
+            <div><a href="#" class="hot-title">Union-Find (Disjoint Set Union) explained simply</a><div class="hot-stat">▲ 189 · 21 answers</div></div>
+          </div>
+          <div class="hot-topic">
+            <span class="hot-num">3</span>
+            <div><a href="#" class="hot-title">Trie vs HashMap for string problems</a><div class="hot-stat">▲ 142 · 18 answers</div></div>
+          </div>
+          <div class="hot-topic">
+            <span class="hot-num">4</span>
+            <div><a href="#" class="hot-title">How to handle overflow in Java interview problems?</a><div class="hot-stat">▲ 98 · 12 answers</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-head">🏷️ Popular Tags</div>
+        <div class="sidebar-body">
+          <div class="tag-cloud">
+            <a href="#" class="cloud-tag">dynamic-programming</a>
+            <a href="#" class="cloud-tag">graph</a>
+            <a href="#" class="cloud-tag">tree</a>
+            <a href="#" class="cloud-tag">array</a>
+            <a href="#" class="cloud-tag">string</a>
+            <a href="#" class="cloud-tag">BFS</a>
+            <a href="#" class="cloud-tag">DFS</a>
+            <a href="#" class="cloud-tag">binary-search</a>
+            <a href="#" class="cloud-tag">recursion</a>
+            <a href="#" class="cloud-tag">backtracking</a>
+            <a href="#" class="cloud-tag">greedy</a>
+            <a href="#" class="cloud-tag">stack</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-head">📣 Community Stats</div>
+        <div class="sidebar-body">
+          <div style="display:flex;flex-direction:column;gap:.6rem">
+            <div style="display:flex;justify-content:space-between;font-size:.82rem">
+              <span style="color:var(--muted)">Total Threads</span>
+              <span style="font-family:'Space Mono',monospace;font-size:.78rem">8,241</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem">
+              <span style="color:var(--muted)">Answered</span>
+              <span style="font-family:'Space Mono',monospace;font-size:.78rem;color:var(--accent)">94.2%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem">
+              <span style="color:var(--muted)">Active Today</span>
+              <span style="font-family:'Space Mono',monospace;font-size:.78rem">312 users</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2026 Algo Arena.</span>
+    <span style="color:var(--accent);">{ code · learn · conquer }</span>
+  </div>
+</footer>
+
+</body>
+</html>

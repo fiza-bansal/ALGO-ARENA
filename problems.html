@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Problems — Algo Arena</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .page { padding-top: 64px; }
+    .page-header {
+      padding: 3rem 2.5rem 2rem;
+      background: linear-gradient(180deg, #0d1422 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
+    }
+
+    /* SEARCH + FILTERS */
+    .search-bar {
+      display: flex; gap: .75rem; align-items: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: .6rem 1rem;
+      width: 320px; transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: var(--accent); }
+    .search-bar input {
+      background: transparent; border: none; outline: none;
+      color: var(--text); font-size: .875rem; font-family: 'Inter', sans-serif;
+      width: 100%;
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+    .search-icon { color: var(--muted); font-size: .9rem; }
+
+    .filter-row {
+      display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.25rem;
+    }
+    .filter-chip {
+      padding: .3rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; cursor: pointer;
+      border: 1px solid var(--border); color: var(--muted);
+      background: transparent; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: rgba(0,229,160,.1); border-color: rgba(0,229,160,.4); color: var(--accent);
+    }
+    .filter-chip.medium.active { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.4); color: #f59e0b; }
+    .filter-chip.hard.active   { background: rgba(239,68,68,.1);  border-color: rgba(239,68,68,.4);  color: #ef4444; }
+
+    /* MAIN LAYOUT */
+    .problems-layout {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2.5rem;
+      display: grid; grid-template-columns: 1fr 300px; gap: 2rem;
+    }
+
+    /* PROBLEM LIST */
+    .problem-table { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .table-head {
+      display: grid; grid-template-columns: 50px 1fr 100px 100px 90px;
+      padding: .75rem 1.25rem; background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      font-size: .72rem; font-family: 'Space Mono', monospace;
+      color: var(--muted); letter-spacing: .5px; text-transform: uppercase;
+    }
+    .problem-row {
+      display: grid; grid-template-columns: 50px 1fr 100px 100px 90px;
+      padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
+      align-items: center; text-decoration: none; color: inherit;
+      transition: background .2s;
+    }
+    .problem-row:last-child { border-bottom: none; }
+    .problem-row:hover { background: var(--surface2); }
+    .row-num { font-family: 'Space Mono', monospace; font-size: .75rem; color: var(--muted); }
+    .row-title-wrap { display: flex; flex-direction: column; gap: .3rem; }
+    .row-title { font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700; }
+    .row-tags { display: flex; gap: .3rem; flex-wrap: wrap; }
+    .row-solve { font-family: 'Space Mono', monospace; font-size: .75rem; color: var(--muted); }
+    .row-votes { font-family: 'Space Mono', monospace; font-size: .75rem; color: var(--accent); }
+    .solved-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+    .unsolved-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+    .sidebar-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .sidebar-head {
+      padding: .85rem 1.25rem; background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700;
+    }
+    .sidebar-body { padding: 1rem 1.25rem; }
+
+    /* PROGRESS */
+    .progress-stats { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+    .prog-item { text-align: center; }
+    .prog-num { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; }
+    .prog-label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .prog-bar-wrap { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-bottom: .4rem; }
+    .prog-bar { height: 100%; border-radius: 3px; }
+
+    /* TOPIC BUTTONS */
+    .topic-grid { display: flex; flex-direction: column; gap: .5rem; }
+    .topic-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .5rem .75rem; border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent; transition: all .2s; text-decoration: none; color: inherit;
+    }
+    .topic-row:hover { background: var(--surface2); border-color: var(--border); }
+    .topic-name { font-size: .82rem; font-weight: 500; display: flex; align-items: center; gap: .5rem; }
+    .topic-count { font-family: 'Space Mono', monospace; font-size: .7rem; color: var(--muted); }
+
+    /* Pagination */
+    .pagination {
+      display: flex; gap: .4rem; justify-content: center;
+      margin-top: 1.5rem; padding: 1rem;
+    }
+    .page-btn {
+      width: 34px; height: 34px; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--muted); font-size: .8rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace; transition: all .2s;
+    }
+    .page-btn:hover, .page-btn.active { background: rgba(0,229,160,.1); border-color: var(--accent); color: var(--accent); }
+
+    @media (max-width: 900px) {
+      .problems-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .table-head, .problem-row { grid-template-columns: 40px 1fr 90px 80px; }
+      .table-head > :last-child, .problem-row > :last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="bracket">{</span>Algo Arena<span class="bracket">}</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="problems.html" class="active">Problems</a></li>
+    <li><a href="discussions.html">Discuss</a></li>
+    <li><a href="leaderboard.html">Leaderboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="btn btn-ghost">Log In</a>
+    <a href="login.html" class="btn btn-primary">Join Free</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div>
+        <div class="section-label">// Problem Set</div>
+        <h1 class="section-title" style="margin:0">Coding Challenges</h1>
+        <p class="section-sub" style="margin-top:.5rem">3,412 problems · Sorted by popularity</p>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search problems..."/>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;padding:0 2.5rem 0">
+      <div class="filter-row">
+        <button class="filter-chip active">All</button>
+        <button class="filter-chip active easy">Easy</button>
+        <button class="filter-chip medium">Medium</button>
+        <button class="filter-chip hard">Hard</button>
+        <button class="filter-chip">Array</button>
+        <button class="filter-chip">String</button>
+        <button class="filter-chip">Tree</button>
+        <button class="filter-chip">Graph</button>
+        <button class="filter-chip">Dynamic Programming</button>
+        <button class="filter-chip">Sorting</button>
+        <button class="filter-chip">Binary Search</button>
+        <button class="filter-chip">Stack</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="problems-layout">
+    <!-- PROBLEM TABLE -->
+    <div>
+      <div class="problem-table">
+        <div class="table-head">
+          <span>#</span><span>Title</span><span>Difficulty</span><span>▲ Votes</span><span>Solved</span>
+        </div>
+
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">1</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Two Sum</span>
+            <div class="row-tags"><span class="tag">array</span><span class="tag">hashmap</span></div>
+          </div>
+          <span class="difficulty easy">Easy</span>
+          <span class="row-votes">▲ 4,821</span>
+          <span class="solved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">2</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Valid Parentheses</span>
+            <div class="row-tags"><span class="tag">stack</span><span class="tag">string</span></div>
+          </div>
+          <span class="difficulty easy">Easy</span>
+          <span class="row-votes">▲ 3,204</span>
+          <span class="solved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">3</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Longest Substring Without Repeating Chars</span>
+            <div class="row-tags"><span class="tag">sliding-window</span><span class="tag">string</span></div>
+          </div>
+          <span class="difficulty medium">Medium</span>
+          <span class="row-votes">▲ 2,988</span>
+          <span class="unsolved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">4</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Merge K Sorted Lists</span>
+            <div class="row-tags"><span class="tag">heap</span><span class="tag">linked-list</span></div>
+          </div>
+          <span class="difficulty hard">Hard</span>
+          <span class="row-votes">▲ 2,110</span>
+          <span class="unsolved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">5</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Binary Tree Level Order Traversal</span>
+            <div class="row-tags"><span class="tag">tree</span><span class="tag">BFS</span></div>
+          </div>
+          <span class="difficulty medium">Medium</span>
+          <span class="row-votes">▲ 1,890</span>
+          <span class="solved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">6</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Coin Change</span>
+            <div class="row-tags"><span class="tag">dp</span><span class="tag">bfs</span></div>
+          </div>
+          <span class="difficulty medium">Medium</span>
+          <span class="row-votes">▲ 1,780</span>
+          <span class="unsolved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">7</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Word Ladder II</span>
+            <div class="row-tags"><span class="tag">graph</span><span class="tag">BFS</span><span class="tag">backtracking</span></div>
+          </div>
+          <span class="difficulty hard">Hard</span>
+          <span class="row-votes">▲ 1,643</span>
+          <span class="unsolved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">8</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Find Median from Data Stream</span>
+            <div class="row-tags"><span class="tag">heap</span><span class="tag">design</span></div>
+          </div>
+          <span class="difficulty hard">Hard</span>
+          <span class="row-votes">▲ 1,421</span>
+          <span class="unsolved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">9</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Climbing Stairs</span>
+            <div class="row-tags"><span class="tag">dp</span><span class="tag">math</span></div>
+          </div>
+          <span class="difficulty easy">Easy</span>
+          <span class="row-votes">▲ 1,301</span>
+          <span class="solved-dot"></span>
+        </a>
+        <a href="problem-detail.html" class="problem-row">
+          <span class="row-num">10</span>
+          <div class="row-title-wrap">
+            <span class="row-title">Maximum Subarray (Kadane's Algorithm)</span>
+            <div class="row-tags"><span class="tag">array</span><span class="tag">dp</span></div>
+          </div>
+          <span class="difficulty medium">Medium</span>
+          <span class="row-votes">▲ 1,188</span>
+          <span class="unsolved-dot"></span>
+        </a>
+      </div>
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">…</button>
+        <button class="page-btn">34</button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-head">📊 Your Progress</div>
+        <div class="sidebar-body">
+          <div class="progress-stats">
+            <div class="prog-item"><div class="prog-num" style="color:#22c55e">42</div><div class="prog-label">Easy</div></div>
+            <div class="prog-item"><div class="prog-num" style="color:#f59e0b">18</div><div class="prog-label">Medium</div></div>
+            <div class="prog-item"><div class="prog-num" style="color:#ef4444">5</div><div class="prog-label">Hard</div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:.3rem"><span>Easy</span><span>42 / 850</span></div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:5%;background:#22c55e"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin:.5rem 0 .3rem"><span>Medium</span><span>18 / 1,890</span></div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:1%;background:#f59e0b"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin:.5rem 0 .3rem"><span>Hard</span><span>5 / 672</span></div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:0.7%;background:#ef4444"></div></div>
+          </div>
+          <a href="profile.html" class="btn btn-outline" style="width:100%;justify-content:center;margin-top:1rem">View Full Profile</a>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-head">🗂️ Topics</div>
+        <div class="sidebar-body" style="padding:.5rem .75rem">
+          <div class="topic-grid">
+            <a href="#" class="topic-row"><span class="topic-name">📦 Array</span><span class="topic-count">420</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">🔤 String</span><span class="topic-count">384</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">🌲 Tree</span><span class="topic-count">210</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">🕸️ Graph</span><span class="topic-count">198</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">♟️ Dynamic Programming</span><span class="topic-count">175</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">📚 Stack / Queue</span><span class="topic-count">143</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">🔍 Binary Search</span><span class="topic-count">121</span></a>
+            <a href="#" class="topic-row"><span class="topic-name">🔗 Linked List</span><span class="topic-count">98</span></a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2026 Algo Arena.</span>
+    <span style="color:var(--accent);">{ code · learn · conquer }</span>
+  </div>
+</footer>
+
+</body>
+</html>
