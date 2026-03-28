@@ -15,22 +15,37 @@
       padding: 3rem 2.5rem 0;
     }
     .profile-header-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; gap: 2rem; align-items: flex-end; padding-bottom: 0;
+      max-width: 1200px; 
+      margin: 0 auto;
+      display: flex; 
+      gap: 2rem; 
+      align-items: flex-end; 
+      padding-bottom: 0;
     }
     .profile-avatar {
-      width: 96px; height: 96px; border-radius: 50%;
+      width: 96px; 
+      height: 96px; 
+      border-radius: 50%;
       background: linear-gradient(135deg, rgba(0,229,160,.3), rgba(14,165,233,.3));
       border: 3px solid var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--accent);
-      flex-shrink: 0; box-shadow: 0 0 30px rgba(0,229,160,.2);
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      font-family: 'Syne', sans-serif; 
+      font-size: 2.5rem; 
+      font-weight: 800; 
+      color: var(--accent);
+      flex-shrink: 0; 
+      box-shadow: 0 0 30px rgba(0,229,160,.2);
       margin-bottom: -1px;
     }
     .profile-info { flex: 1; padding-bottom: 1.5rem; }
     .profile-name {
-      font-family: 'Syne', sans-serif; font-size: 1.75rem;
-      font-weight: 800; letter-spacing: -.5px; margin-bottom: .25rem;
+      font-family: 'Syne', sans-serif; 
+      font-size: 1.75rem;
+      font-weight: 800; 
+      letter-spacing: -.5px; 
+      margin-bottom: .25rem;
     }
     .profile-title { color: var(--accent); font-size: .875rem; font-family: 'Space Mono', monospace; margin-bottom: .75rem; }
     .profile-bio { color: var(--muted); font-size: .875rem; line-height: 1.6; max-width: 480px; margin-bottom: .75rem; }
@@ -39,13 +54,24 @@
     .profile-actions { display: flex; gap: .75rem; padding-bottom: 1.5rem; }
 
     .profile-tabs {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; gap: 0; border-bottom: none;
+      max-width: 1200px; 
+      margin: 0 auto;
+      display: flex; 
+      gap: 0; 
+      border-bottom: none;
     }
     .profile-tab {
-      padding: .85rem 1.25rem; font-size: .875rem; font-weight: 500; cursor: pointer;
-      color: var(--muted); border-bottom: 2px solid transparent; transition: all .2s;
-      background: none; border-top: none; border-left: none; border-right: none;
+      padding: .85rem 1.25rem; 
+      font-size: .875rem; 
+      font-weight: 500; 
+      cursor: pointer;
+      color: var(--muted); 
+      border-bottom: 2px solid transparent; 
+      transition: all .2s;
+      background: none; 
+      border-top: none; 
+      border-left: none; 
+      border-right: none;
       font-family: 'Inter', sans-serif;
     }
     .profile-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -53,32 +79,51 @@
 
     /* MAIN LAYOUT */
     .profile-layout {
-      max-width: 1200px; margin: 0 auto; padding: 2rem 2.5rem;
-      display: grid; grid-template-columns: 1fr 300px; gap: 2rem;
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 2rem 2.5rem;
+      display: grid; 
+      grid-template-columns: 1fr 300px; gap: 2rem;
     }
 
     /* STATS ROW */
     .stats-row {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 1rem; 
+      margin-bottom: 1.5rem;
     }
     .stat-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-      padding: 1.25rem; text-align: center;
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      border-radius: 10px;
+      padding: 1.25rem; 
+      text-align: center;
     }
     .stat-card .num {
-      font-family: 'Space Mono', monospace; font-size: 1.5rem; font-weight: 700;
+      font-family: 'Space Mono', monospace; 
+      font-size: 1.5rem; 
+      font-weight: 700;
       margin-bottom: .2rem;
     }
     .stat-card .lbl { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
 
     /* HEATMAP */
     .heatmap-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 1.5rem; margin-bottom: 1.5rem;
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      border-radius: 12px;
+      padding: 1.5rem; 
+      margin-bottom: 1.5rem;
     }
     .heatmap-title {
-      font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: 1rem;
-      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'Syne', sans-serif; 
+      font-size: .95rem; 
+      font-weight: 700; 
+      margin-bottom: 1rem;
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
     }
     .heatmap-grid {
       display: grid; grid-template-columns: repeat(52, 1fr); gap: 2px;
@@ -91,15 +136,23 @@
     .hm-cell.l3 { background: rgba(0,229,160,.7); }
     .hm-cell.l4 { background: rgba(0,229,160,1); }
     .heatmap-legend {
-      display: flex; gap: .4rem; align-items: center; font-size: .7rem;
-      color: var(--muted); margin-top: .75rem; justify-content: flex-end;
+      display: flex; 
+      gap: .4rem; 
+      align-items: center; 
+      font-size: .7rem;
+      color: var(--muted); 
+      margin-top: .75rem; 
+      justify-content: flex-end;
     }
     .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
     /* PROGRESS BARS */
     .progress-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 1.5rem; margin-bottom: 1.5rem;
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      border-radius: 12px;
+      padding: 1.5rem; 
+      margin-bottom: 1.5rem;
     }
     .progress-card h3 { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: 1.25rem; }
     .prog-item { margin-bottom: 1rem; }
@@ -111,19 +164,30 @@
 
     /* RECENT ACTIVITY */
     .activity-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      border-radius: 12px;
       padding: 1.5rem;
     }
     .activity-card h3 { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: 1rem; }
     .activity-item {
-      display: flex; gap: 1rem; padding: .75rem 0;
-      border-bottom: 1px solid var(--border); align-items: flex-start;
+      display: flex; 
+      gap: 1rem; 
+      padding: .75rem 0;
+      border-bottom: 1px solid var(--border); 
+      align-items: flex-start;
     }
     .activity-item:last-child { border-bottom: none; }
     .activity-icon {
-      width: 32px; height: 32px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; font-size: .9rem;
-      flex-shrink: 0; margin-top: 2px;
+      width: 32px; 
+      height: 32px; 
+      border-radius: 8px;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: .9rem;
+      flex-shrink: 0; 
+      margin-top: 2px;
     }
     .activity-text { flex: 1; }
     .activity-text strong { font-size: .875rem; display: block; margin-bottom: .15rem; }
@@ -134,16 +198,25 @@
     .sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
     .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
     .sidebar-head {
-      padding: .85rem 1.25rem; background: var(--surface2);
+      padding: .85rem 1.25rem; 
+      background: var(--surface2);
       border-bottom: 1px solid var(--border);
-      font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700;
+      font-family: 'Syne', sans-serif; 
+      font-size: .9rem; 
+      font-weight: 700;
     }
     .sidebar-body { padding: 1rem 1.25rem; }
     .badge-row { display: flex; flex-wrap: wrap; gap: .5rem; }
     .badge-pill {
-      display: flex; align-items: center; gap: .35rem;
-      padding: .3rem .65rem; border-radius: 99px; font-size: .75rem; font-weight: 500;
-      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; 
+      align-items: center; 
+      gap: .35rem;
+      padding: .3rem .65rem; 
+      border-radius: 99px; 
+      font-size: .75rem; 
+      font-weight: 500;
+      background: var(--surface2); 
+      border: 1px solid var(--border);
     }
 
     @media (max-width: 900px) {
