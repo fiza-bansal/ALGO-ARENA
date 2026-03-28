@@ -71,7 +71,7 @@
       margin-bottom: 1.5rem; 
       animation: fadeUp .6s ease both;
     }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1.5s infinite; }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent);}
     h1 {
       font-family: 'Syne', sans-serif;
       font-size: clamp(2.5rem, 5vw, 4rem);
@@ -81,7 +81,7 @@
       animation: fadeUp .7s ease .1s both;
     }
     h1 .c1 { color: var(--accent); }
-    h1 .c2 { color: var(--accent2); }
+    h1 .c2 { color: var(--accent); }
     .hero-sub {
       color: var(--muted); 
       font-size: 1.05rem; 
@@ -113,15 +113,6 @@
       box-shadow: var(--card-glow), 0 40px 80px rgba(0,0,0,.5);
       animation: fadeUp .8s ease .2s both; 
       position: relative;
-    }
-    .code-card::before {
-      content: ''; 
-      position: absolute; 
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
     .code-header {
       display: flex; 
