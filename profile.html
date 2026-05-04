@@ -361,22 +361,57 @@
 </footer>
 
 <script>
-  // Generate heatmap
-  const grid = document.getElementById('heatmap');
-  const levels = [0,0,0,0,1,1,2,0,0,1,3,4,2,1,0,0,2,3,1,4,0,0,1,2,3,4,1,0,0,1,0,2,3,1,4,2,0,0,3,4,2,1,0,0,1,2,3,0,0,1,4,2];
-  for (let i = 0; i < 364; i++) {
-    const cell = document.createElement('div');
-    const rand = Math.random();
-    let cls = 'hm-cell';
-    if (rand < .45) cls += '';
-    else if (rand < .62) cls += ' l1';
-    else if (rand < .78) cls += ' l2';
-    else if (rand < .9) cls += ' l3';
-    else cls += ' l4';
-    cell.className = cls;
-    grid.appendChild(cell);
-  }
-</script>
+  // Wait for the page to finish loading
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- 1. TAB SWITCHING LOGIC ---
+    const tabs = document.querySelectorAll('.profile-tab');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove 'active' class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            // Add 'active' class to the clicked tab
+            tab.classList.add('active');
+
+            // Beginner Note: In a real app, you would also hide/show 
+            // different content sections here based on the tab name!
+            console.log("Switched to tab: " + tab.innerText);
+        });
+    });
+
+    // --- 2. FOLLOW BUTTON TOGGLE ---
+    const followBtn = document.querySelector('.btn-primary');
+
+    // Check if the button exists and is the "Follow" button
+    if (followBtn && followBtn.innerText.includes('Follow')) {
+        followBtn.addEventListener('click', () => {
+            if (followBtn.innerText === '+ Follow') {
+                followBtn.innerText = '✓ Following';
+                followBtn.style.background = 'var(--surface2)';
+                followBtn.style.color = 'var(--text)';
+            } else {
+                followBtn.innerText = '+ Follow';
+                followBtn.style.background = ''; // Resets to CSS default
+                followBtn.style.color = '';
+            }
+        });
+    }
+
+    // --- 3. DYNAMIC GREETING (BONUS) ---
+    const profileName = document.querySelector('.profile-name');
+    const now = new Date();
+    const hour = now.getHours();
+    let greeting = "";
+
+    if (hour < 12) greeting = "Good Morning, ";
+    else if (hour < 18) greeting = "Good Afternoon, ";
+    else greeting = "Good Evening, ";
+
+    console.log(greeting + profileName.innerText + "!");
+});
+  </script>
 
 </body>
 </html>
