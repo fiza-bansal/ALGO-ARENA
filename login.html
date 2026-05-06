@@ -4,17 +4,26 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login — Algo Arena</title>
-  <link rel="stylesheet" href="./shared.css"/>
+  <link rel="stylesheet" href="shared.css"/>
 
   <style>
+
+    /* ── BODY LAYOUT ─────────────────────────────
+       We want the login card perfectly centered
+       on the screen — flex on the body does this.
+       ─────────────────────────────────────────── */
     body {
       display: flex;
-      align-items: center;       
-      justify-content: center;   
+      align-items: center;       /* vertical center */
+      justify-content: center;   /* horizontal center */
       min-height: 100vh;
-      overflow: hidden;          
+      overflow: hidden;          /* hide background elements that overflow */
     }
 
+
+    /* ── ANIMATED BACKGROUND ─────────────────────
+       A grid of faint lines that slowly moves down.
+       ─────────────────────────────────────────── */
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -25,6 +34,7 @@
       animation: gridShift 20s linear infinite;
     }
 
+    /* Large glowing circles in the background corners */
     .bg-glow1 {
       position: fixed;
       width: 500px;
@@ -47,6 +57,11 @@
       animation: pulse 8s ease-in-out infinite reverse;
     }
 
+
+    /* ── AUTH WRAPPER ────────────────────────────
+       The container that holds the logo + card.
+       Sits above the background with z-index: 2.
+       ─────────────────────────────────────────── */
     .auth-wrap {
       position: relative;
       z-index: 2;
@@ -55,6 +70,7 @@
       padding: 1.5rem;
     }
 
+    /* Logo centered above the card */
     .auth-logo {
       text-align: center;
       margin-bottom: 2rem;
@@ -72,6 +88,10 @@
       color: var(--accent);
     }
 
+
+    /* ── AUTH CARD ───────────────────────────────
+       The white box containing the login form.
+       ─────────────────────────────────────────── */
     .auth-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -81,6 +101,7 @@
       position: relative;
     }
 
+    /* Glowing green line at the very top of the card */
     .auth-card::before {
       content: '';
       position: absolute;
@@ -89,13 +110,17 @@
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
 
+
+    /* ── TABS (Log In / Sign Up) ─────────────────
+       Two buttons at the top that switch panels.
+       ─────────────────────────────────────────── */
     .auth-tabs {
       display: flex;
       border-bottom: 1px solid var(--border);
     }
 
     .auth-tab {
-      flex: 1;              
+      flex: 1;              /* each tab takes equal width */
       padding: 1rem;
       text-align: center;
       cursor: pointer;
@@ -109,6 +134,7 @@
       transition: all 0.2s;
     }
 
+    /* Active tab gets a green underline */
     .auth-tab.active {
       color: var(--accent);
       border-bottom-color: var(--accent);
@@ -120,6 +146,10 @@
       background: var(--surface2);
     }
 
+
+    /* ── FORM BODY ───────────────────────────────
+       The form area inside each panel.
+       ─────────────────────────────────────────── */
     .auth-body {
       padding: 2rem;
     }
@@ -137,12 +167,16 @@
       margin-bottom: 1.75rem;
     }
 
+
+    /* ── FORM GROUP & LABEL ──────────────────────
+       Wrapper for each label + input pair.
+       ─────────────────────────────────────────── */
     .form-group {
       margin-bottom: 1.1rem;
     }
 
     .form-label {
-      display: block;       
+      display: block;       /* make it full width so input goes below it */
       font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
@@ -150,6 +184,7 @@
       letter-spacing: 0.3px;
     }
 
+    /* The text input field */
     .form-input {
       width: 100%;
       padding: 0.7rem 1rem;
@@ -163,6 +198,7 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
+    /* Highlight the input when the user clicks on it */
     .form-input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(0,229,160,.1);
@@ -172,12 +208,14 @@
       color: var(--muted);
     }
 
+    /* Two inputs side by side (First Name / Last Name) */
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
     }
 
+    /* "Forgot password?" link floated right of the label */
     .forgot {
       font-size: 0.78rem;
       color: var(--accent);
@@ -189,6 +227,10 @@
       text-decoration: underline;
     }
 
+
+    /* ── SUBMIT BUTTON ───────────────────────────
+       The main "Log In" / "Create Account" button.
+       ─────────────────────────────────────────── */
     .submit-btn {
       width: 100%;
       padding: 0.85rem;
@@ -210,6 +252,11 @@
       box-shadow: 0 0 24px rgba(0,229,160,.35);
     }
 
+
+    /* ── DIVIDER TEXT ("or continue with") ───────
+       A horizontal line with centered text.
+       The ::before and ::after add the lines.
+       ─────────────────────────────────────────── */
     .divider-text {
       text-align: center;
       position: relative;
@@ -218,6 +265,7 @@
       color: var(--muted);
     }
 
+    /* Left line */
     .divider-text::before {
       content: '';
       position: absolute;
@@ -228,6 +276,7 @@
       background: var(--border);
     }
 
+    /* Right line */
     .divider-text::after {
       content: '';
       position: absolute;
@@ -238,6 +287,10 @@
       background: var(--border);
     }
 
+
+    /* ── OAUTH BUTTONS (GitHub / Google) ─────────
+       Social login buttons in a 2-column grid.
+       ─────────────────────────────────────────── */
     .oauth-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -266,6 +319,10 @@
       background: var(--surface);
     }
 
+
+    /* ── SKILL CHIPS (Beginner/Intermediate/etc.) ─
+       Selectable level chips on the sign-up form.
+       ─────────────────────────────────────────── */
     .skill-section {
       margin-top: 1.25rem;
     }
@@ -296,12 +353,15 @@
       font-family: 'Inter', sans-serif;
     }
 
+    /* Selected state for level chips */
     .skill-chip.selected {
       background: rgba(0,229,160,.1);
       border-color: rgba(0,229,160,.4);
       color: var(--accent);
     }
 
+
+    /* "Don't have an account?" link at the bottom */
     .bottom-link {
       text-align: center;
       margin-top: 1.5rem;
@@ -318,6 +378,11 @@
       text-decoration: underline;
     }
 
+
+    /* ── PANEL SWITCHING ─────────────────────────
+       Only the panel with class="active" is shown.
+       JavaScript toggles this class on tab click.
+       ─────────────────────────────────────────── */
     .panel {
       display: none;
     }
@@ -329,20 +394,33 @@
   </style>
 </head>
 <body>
+
+  <!-- Background decorative elements -->
   <div class="bg-grid"></div>
   <div class="bg-glow1"></div>
   <div class="bg-glow2"></div>
+
+  <!-- The login card wrapper -->
   <div class="auth-wrap">
+
+    <!-- Logo above the card -->
     <a href="index.html" class="auth-logo">
       <span class="bracket">{</span> Algo Arena <span class="bracket">}</span>
     </a>
+
+    <!-- The card itself -->
     <div class="auth-card">
+
+      <!-- Tab buttons: "Log In" and "Sign Up" -->
       <div class="auth-tabs">
+        <!-- onclick calls a JS function to switch panels -->
         <button class="auth-tab active" onclick="switchTab('login', this)">Log In</button>
         <button class="auth-tab"        onclick="switchTab('signup', this)">Sign Up</button>
       </div>
 
-<!-- ── LOGIN PANEL ─── -->
+
+      <!-- ── LOGIN PANEL ─── -->
+      <!-- id="panel-login" so JS can find and show/hide it -->
       <div class="auth-body panel active" id="panel-login">
 
         <h2>Welcome back 👋</h2>
@@ -351,7 +429,7 @@
         <!-- Email / Username field -->
         <div class="form-group">
           <label class="form-label">Email or Username</label>
-          <input type="text" class="form-input" placeholder="you@example.com" />
+          <input type="text" class="form-input" placeholder="you@example.com"/>
         </div>
 
         <!-- Password field -->
@@ -360,12 +438,12 @@
             Password
             <a href="#" class="forgot">Forgot password?</a>
           </label>
-          <input type="password" class="form-input" placeholder="••••••••" />
+          <input type="password" class="form-input" placeholder="••••••••"/>
         </div>
 
         <!-- Submit button wrapped in <a> to navigate to profile page -->
         <a href="profile.html">
-          <button class="submit-btn" >Log In →</button>
+          <button class="submit-btn">Log In →</button>
         </a>
 
         <div class="divider-text">or continue with</div>
@@ -394,28 +472,29 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">First Name</label>
-            <input type="text" class="form-input" placeholder="First Name" />
+            <input type="text" class="form-input" placeholder="Ravi"/>
           </div>
           <div class="form-group">
             <label class="form-label">Last Name</label>
-            <input type="text" class="form-input" placeholder="Last Name"/>
+            <input type="text" class="form-input" placeholder="Sharma"/>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Username</label>
-          <input type="text" class="form-input" placeholder="Username" />
+          <input type="text" class="form-input" placeholder="ravi_codes"/>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input type="email" class="form-input" placeholder="you@example.com" />
+          <!-- type="email" gives mobile users a keyboard with @ key -->
+          <input type="email" class="form-input" placeholder="you@example.com"/>
         </div>
 
         <div class="form-group">
           <label class="form-label">Password</label>
-          <input type="password" class="form-input" placeholder="At least 8 characters" />
-          
+          <!-- type="password" hides the characters -->
+          <input type="password" class="form-input" placeholder="At least 8 characters"/>
         </div>
 
         <!-- Skill level picker -->
@@ -430,7 +509,7 @@
         </div>
 
         <a href="profile.html" style="display: block; margin-top: 1.25rem;">
-          <button class="submit-btn" >Create Account →</button>
+          <button class="submit-btn">Create Account →</button>
         </a>
 
         <div class="divider-text">or sign up with</div>
@@ -448,6 +527,7 @@
 
     </div>
   </div>
+
 
   <!-- ── JAVASCRIPT ─────────────────────────────
        Small scripts for the tab switching and
@@ -513,12 +593,6 @@
     }
 
   </script>
-
-
-
-  
-  
-  
 
 </body>
 </html>
