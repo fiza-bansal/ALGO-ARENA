@@ -8,17 +8,22 @@
 
   <style>
 
-    
+    /* ── BODY LAYOUT ─────────────────────────────
+       We want the login card perfectly centered
+       on the screen — flex on the body does this.
+       ─────────────────────────────────────────── */
     body {
       display: flex;
-      align-items: center;       
-      justify-content: center;   
+      align-items: center;       /* vertical center */
+      justify-content: center;   /* horizontal center */
       min-height: 100vh;
-      overflow: hidden;          
+      overflow: hidden;          /* hide background elements that overflow */
     }
 
 
-    
+    /* ── ANIMATED BACKGROUND ─────────────────────
+       A grid of faint lines that slowly moves down.
+       ─────────────────────────────────────────── */
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -29,7 +34,7 @@
       animation: gridShift 20s linear infinite;
     }
 
-    
+    /* Large glowing circles in the background corners */
     .bg-glow1 {
       position: fixed;
       width: 500px;
@@ -53,7 +58,10 @@
     }
 
 
-    
+    /* ── AUTH WRAPPER ────────────────────────────
+       The container that holds the logo + card.
+       Sits above the background with z-index: 2.
+       ─────────────────────────────────────────── */
     .auth-wrap {
       position: relative;
       z-index: 2;
@@ -81,7 +89,9 @@
     }
 
 
-    
+    /* ── AUTH CARD ───────────────────────────────
+       The white box containing the login form.
+       ─────────────────────────────────────────── */
     .auth-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -101,14 +111,16 @@
     }
 
 
-    
+    /* ── TABS (Log In / Sign Up) ─────────────────
+       Two buttons at the top that switch panels.
+       ─────────────────────────────────────────── */
     .auth-tabs {
       display: flex;
       border-bottom: 1px solid var(--border);
     }
 
     .auth-tab {
-      flex: 1;              
+      flex: 1;              /* each tab takes equal width */
       padding: 1rem;
       text-align: center;
       cursor: pointer;
@@ -135,7 +147,9 @@
     }
 
 
-    
+    /* ── FORM BODY ───────────────────────────────
+       The form area inside each panel.
+       ─────────────────────────────────────────── */
     .auth-body {
       padding: 2rem;
     }
@@ -154,13 +168,15 @@
     }
 
 
-    
+    /* ── FORM GROUP & LABEL ──────────────────────
+       Wrapper for each label + input pair.
+       ─────────────────────────────────────────── */
     .form-group {
       margin-bottom: 1.1rem;
     }
 
     .form-label {
-      display: block;       
+      display: block;       /* make it full width so input goes below it */
       font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
@@ -168,7 +184,7 @@
       letter-spacing: 0.3px;
     }
 
-    
+    /* The text input field */
     .form-input {
       width: 100%;
       padding: 0.7rem 1rem;
@@ -182,7 +198,7 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    
+    /* Highlight the input when the user clicks on it */
     .form-input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(0,229,160,.1);
@@ -192,14 +208,14 @@
       color: var(--muted);
     }
 
-    
+    /* Two inputs side by side (First Name / Last Name) */
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
     }
 
-    
+    /* "Forgot password?" link floated right of the label */
     .forgot {
       font-size: 0.78rem;
       color: var(--accent);
@@ -211,6 +227,10 @@
       text-decoration: underline;
     }
 
+
+    /* ── SUBMIT BUTTON ───────────────────────────
+       The main "Log In" / "Create Account" button.
+       ─────────────────────────────────────────── */
     .submit-btn {
       width: 100%;
       padding: 0.85rem;
@@ -231,7 +251,12 @@
       background: #00ffb3;
       box-shadow: 0 0 24px rgba(0,229,160,.35);
     }
-     
+
+
+    /* ── DIVIDER TEXT ("or continue with") ───────
+       A horizontal line with centered text.
+       The ::before and ::after add the lines.
+       ─────────────────────────────────────────── */
     .divider-text {
       text-align: center;
       position: relative;
@@ -262,6 +287,10 @@
       background: var(--border);
     }
 
+
+    /* ── OAUTH BUTTONS (GitHub / Google) ─────────
+       Social login buttons in a 2-column grid.
+       ─────────────────────────────────────────── */
     .oauth-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -349,6 +378,11 @@
       text-decoration: underline;
     }
 
+
+    /* ── PANEL SWITCHING ─────────────────────────
+       Only the panel with class="active" is shown.
+       JavaScript toggles this class on tab click.
+       ─────────────────────────────────────────── */
     .panel {
       display: none;
     }
@@ -361,60 +395,60 @@
 </head>
 <body>
 
-  
+  <!-- Background decorative elements -->
   <div class="bg-grid"></div>
   <div class="bg-glow1"></div>
   <div class="bg-glow2"></div>
 
-  
+  <!-- The login card wrapper -->
   <div class="auth-wrap">
 
-    
+    <!-- Logo above the card -->
     <a href="index.html" class="auth-logo">
       <span class="bracket">{</span> Algo Arena <span class="bracket">}</span>
     </a>
 
-    
+    <!-- The card itself -->
     <div class="auth-card">
 
-      
+      <!-- Tab buttons: "Log In" and "Sign Up" -->
       <div class="auth-tabs">
-        
+        <!-- onclick calls a JS function to switch panels -->
         <button class="auth-tab active" onclick="switchTab('login', this)">Log In</button>
         <button class="auth-tab"        onclick="switchTab('signup', this)">Sign Up</button>
       </div>
 
 
-      
+      <!-- ── LOGIN PANEL ─── -->
+      <!-- id="panel-login" so JS can find and show/hide it -->
       <div class="auth-body panel active" id="panel-login">
 
         <h2>Welcome back 👋</h2>
         <p>Continue your coding journey where you left off.</p>
 
-        
+        <!-- Email / Username field -->
         <div class="form-group">
           <label class="form-label">Email or Username</label>
-          <input type="text" class="form-input" placeholder="you@example.com"oninput="validateSignupLive()"/>
+          <input type="text" class="form-input" placeholder="you@example.com"/>
         </div>
 
-       
+        <!-- Password field -->
         <div class="form-group">
           <label class="form-label">
             Password
             <a href="#" class="forgot">Forgot password?</a>
           </label>
-          <input type="password" class="form-input" placeholder="••••••••"oninput="validateLoginLive()"/>
-          <div id="login-error"style="color:red;font-size:0.8rem;"></div>
+          <input type="password" class="form-input" placeholder="••••••••"/>
         </div>
 
-        
+        <!-- Submit button wrapped in <a> to navigate to profile page -->
         <a href="profile.html">
-          <button class="submit-btn" onclick="validateLogin()">Log In →</button>
+          <button class="submit-btn">Log In →</button>
         </a>
 
         <div class="divider-text">or continue with</div>
 
-        
+        <!-- OAuth buttons -->
         <div class="oauth-grid">
           <a href="profile.html" class="oauth-btn"><span>🐙</span> GitHub</a>
           <a href="profile.html" class="oauth-btn"><span>G</span> Google</a>
@@ -422,49 +456,48 @@
 
         <div class="bottom-link">
           Don't have an account?
-          
+          <!-- onclick switches to the signup tab -->
           <a href="#" onclick="switchTabByName('signup')">Sign up free</a>
         </div>
       </div>
 
 
-      
+      <!-- ── SIGN UP PANEL ─── -->
       <div class="auth-body panel" id="panel-signup">
 
         <h2>Join the Arena 🚀</h2>
         <p>Create your free account and start solving problems today.</p>
 
-        
+        <!-- First + Last name in two columns -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">First Name</label>
-            <input type="text" class="form-input" placeholder="First Name" oninput="validateSignupLive()"/>
+            <input type="text" class="form-input" placeholder="Ravi"/>
           </div>
           <div class="form-group">
             <label class="form-label">Last Name</label>
-            <input type="text" class="form-input" placeholder="Last Name" oninput="validateSignupLive()"/>
+            <input type="text" class="form-input" placeholder="Sharma"/>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Username</label>
-          <input type="text" class="form-input" placeholder="Username" oninput="validateSignupLive()"/>
+          <input type="text" class="form-input" placeholder="ravi_codes"/>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email</label>
-          
-          <input type="email" class="form-input" placeholder="you@example.com"oninput="validateSignupLive()"/>
+          <!-- type="email" gives mobile users a keyboard with @ key -->
+          <input type="email" class="form-input" placeholder="you@example.com"/>
         </div>
 
         <div class="form-group">
           <label class="form-label">Password</label>
-         
-          <input type="password" class="form-input" placeholder="At least 8 characters"oninput="validateSignupLive()"/>
-          <div id="signup-error"style="color:red;font-size:0.8rem;"></div>
+          <!-- type="password" hides the characters -->
+          <input type="password" class="form-input" placeholder="At least 8 characters"/>
         </div>
 
-        
+        <!-- Skill level picker -->
         <div class="skill-section">
           <div class="skill-label">Your current level (pick one)</div>
           <div class="skill-grid">
@@ -476,7 +509,7 @@
         </div>
 
         <a href="profile.html" style="display: block; margin-top: 1.25rem;">
-          <button class="submit-btn" onclick="validateSignup()">Create Account →</button>
+          <button class="submit-btn">Create Account →</button>
         </a>
 
         <div class="divider-text">or sign up with</div>
@@ -496,29 +529,45 @@
   </div>
 
 
-  
+  <!-- ── JAVASCRIPT ─────────────────────────────
+       Small scripts for the tab switching and
+       skill chip selection.
+       Note: In a real project this would live in
+       a separate script.js file.
+       ─────────────────────────────────────────── -->
   <script>
 
-    
+    /**
+     * switchTab(panelName, clickedTab)
+     * Called when user clicks Log In or Sign Up tab.
+     * 1. Removes "active" from all tabs
+     * 2. Adds "active" to the clicked tab
+     * 3. Hides all panels
+     * 4. Shows the target panel
+     */
     function switchTab(panelName, clickedTab) {
-      
+      /* Remove active from all tabs */
       document.querySelectorAll('.auth-tab').forEach(function(tab) {
         tab.classList.remove('active');
       });
 
-      
+      /* Add active to the tab that was clicked */
       clickedTab.classList.add('active');
 
-      
+      /* Hide all panels */
       document.querySelectorAll('.panel').forEach(function(panel) {
         panel.classList.remove('active');
       });
 
-     
+      /* Show the matching panel */
       document.getElementById('panel-' + panelName).classList.add('active');
     }
 
-    
+    /**
+     * switchTabByName(panelName)
+     * Called from bottom links ("Sign up free" / "Log in").
+     * Finds the tab button by its text and clicks it.
+     */
     function switchTabByName(panelName) {
       var tabs = document.querySelectorAll('.auth-tab');
       tabs.forEach(function(tab) {
@@ -527,154 +576,21 @@
       });
     }
 
-    
+    /**
+     * selectSkill(clickedChip)
+     * When a skill chip is clicked:
+     * 1. Remove "selected" from all chips
+     * 2. Add "selected" to the clicked chip
+     */
     function selectSkill(clickedChip) {
-     
+      /* Deselect all chips in the same group */
       document.querySelectorAll('.skill-chip').forEach(function(chip) {
         chip.classList.remove('selected');
       });
 
-      
+      /* Select the clicked chip */
       clickedChip.classList.add('selected');
     }
-    /* LOGIN VALIDATION */
-function validateLogin() {
-  const inputs = document.querySelectorAll('#panel-login .form-input');
-  const username = inputs[0].value.trim();
-  const password = inputs[1].value.trim();
-  const errorBox = document.getElementById('login-error');
-
-  if (!username || !password) {
-    errorBox.textContent = "⚠️ Please fill all fields.";
-    return;
-  }
-
-  if (password.length < 6) {
-    errorBox.textContent = "⚠️ Password must be at least 6 characters.";
-    return;
-  }
-  if(password!=password){
-    errorBox.textContent =" Password incorrect!!";
-    return;
-  }
-  //
-   if (!email.includes('@')) {
-    errorBox.textContent = "⚠️ Email must contain '@'.";
-    return;
-  }
-
-  if (!email.includes('.')) {
-    errorBox.textContent = "⚠️ Email must contain '.'.";
-    return;
-  }
-
-  const parts = email.split('@');
-  if (parts[0] === "" || parts[1] === "") {
-    errorBox.textContent = "⚠️ Invalid email format.";
-    return;
-  }
-
-  errorBox.textContent = "";
-  window.location.href = "profile.html";
-}
-
-
-/* SIGNUP VALIDATION */
-function validateSignup() {
-  const inputs = document.querySelectorAll('#panel-signup .form-input');
-
-  const firstName = inputs[0].value.trim();
-  const lastName  = inputs[1].value.trim();
-  const username  = inputs[2].value.trim();
-  const email     = inputs[3].value.trim();
-  const password  = inputs[4].value.trim();
-
-  const selectedSkill = document.querySelector('.skill-chip.selected');
-  const errorBox = document.getElementById('signup-error');
-
-  if (!firstName || !lastName || !username || !email || !password) {
-    errorBox.textContent = "⚠️ Please fill all fields.";
-    return;
-  }
-
-  /* EMAIL */
-  if (!email.includes('@')) {
-    errorBox.textContent = "⚠️ Email must contain '@'.";
-    return;
-  }
-
-  if (!email.includes('.')) {
-    errorBox.textContent = "⚠️ Email must contain '.'.";
-    return;
-  }
-
-  const parts = email.split('@');
-  if (parts[0] === "" || parts[1] === "") {
-    errorBox.textContent = "⚠️ Invalid email format.";
-    return;
-  }
-
-  /* PASSWORD */
-  if (password.length < 8) {
-    errorBox.textContent = "⚠️ Minimum 8 characters required.";
-    return;
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    errorBox.textContent = "⚠️ Add a CAPITAL letter.";
-    return;
-  }
-
-  if (!/[a-z]/.test(password)) {
-    errorBox.textContent = "⚠️ Add a small letter.";
-    return;
-  }
-
-  if (!/[0-9]/.test(password)) {
-    errorBox.textContent = "⚠️ Add a number.";
-    return;
-  }
-
-  if (!/[!@#$%^&*]/.test(password)) {
-    errorBox.textContent = "⚠️ Add a special character.";
-    return;
-  }
-
-  if (!selectedSkill) {
-    errorBox.textContent = "⚠️ Select your level.";
-    return;
-  }
-
-  errorBox.textContent = "";
-  window.location.href = "profile.html";
-}
-
-
-/* LIVE VALIDATION */
-function validateSignupLive() {
-  const inputs = document.querySelectorAll('#panel-signup .form-input');
-
-  const email = inputs[3].value.trim();
-  const password = inputs[4].value.trim();
-  const errorBox = document.getElementById('signup-error');
-
-  let messages = [];
-
-  if (email) {
-    if (!email.includes('@')) messages.push("Missing '@'");
-    if (!email.includes('.')) messages.push("Missing '.'");
-  }
-
-  if (password) {
-    if (password.length < 8) messages.push("Min 8 chars");
-    if (!/[A-Z]/.test(password)) messages.push("1 capital");
-    if (!/[a-z]/.test(password)) messages.push("1 small");
-    if (!/[0-9]/.test(password)) messages.push("1 number");
-    if (!/[!@#$%^&*]/.test(password)) messages.push("1 special");
-  }
-
-  errorBox.innerHTML = messages.length ? "⚠️ " + messages.join("<br>") : "";
-}
 
   </script>
 
