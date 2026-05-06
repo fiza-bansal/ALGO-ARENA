@@ -374,5 +374,53 @@
   </div>
 </footer>
 
+<script>
+  const searchInput = document.querySelector('.search-bar input');
+  const filterChips = document.querySelectorAll('.filter-chip');
+  const threadCards = document.querySelectorAll('.thread-card');
+
+  searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+
+    threadCards.forEach(card => {
+      const title = card.querySelector('.thread-title').textContent.toLowerCase();
+      
+      
+      if (title.includes(searchTerm)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+
+  
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      
+      filterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filterValue = chip.textContent.toLowerCase();
+
+      threadCards.forEach(card => {
+        const excerpt = card.querySelector('.thread-excerpt').textContent.toLowerCase();
+        const tags = card.querySelector('.tag-row').textContent.toLowerCase();
+
+        
+        if (filterValue === 'all') {
+          card.style.display = 'flex';
+        } 
+        
+        else if (tags.includes(filterValue) || excerpt.includes(filterValue)) {
+          card.style.display = 'flex';
+        } 
+        else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
 </body>
 </html>
