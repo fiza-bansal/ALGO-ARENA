@@ -7,23 +7,14 @@
   <link rel="stylesheet" href="./shared.css"/>
 
   <style>
-
-    /* ── BODY LAYOUT ─────────────────────────────
-       We want the login card perfectly centered
-       on the screen — flex on the body does this.
-       ─────────────────────────────────────────── */
     body {
       display: flex;
-      align-items: center;       /* vertical center */
-      justify-content: center;   /* horizontal center */
+      align-items: center;       
+      justify-content: center;   
       min-height: 100vh;
-      overflow: hidden;          /* hide background elements that overflow */
+      overflow: hidden;          
     }
 
-
-    /* ── ANIMATED BACKGROUND ─────────────────────
-       A grid of faint lines that slowly moves down.
-       ─────────────────────────────────────────── */
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -34,7 +25,6 @@
       animation: gridShift 20s linear infinite;
     }
 
-    /* Large glowing circles in the background corners */
     .bg-glow1 {
       position: fixed;
       width: 500px;
@@ -57,11 +47,6 @@
       animation: pulse 8s ease-in-out infinite reverse;
     }
 
-
-    /* ── AUTH WRAPPER ────────────────────────────
-       The container that holds the logo + card.
-       Sits above the background with z-index: 2.
-       ─────────────────────────────────────────── */
     .auth-wrap {
       position: relative;
       z-index: 2;
@@ -70,7 +55,6 @@
       padding: 1.5rem;
     }
 
-    /* Logo centered above the card */
     .auth-logo {
       text-align: center;
       margin-bottom: 2rem;
@@ -88,10 +72,6 @@
       color: var(--accent);
     }
 
-
-    /* ── AUTH CARD ───────────────────────────────
-       The white box containing the login form.
-       ─────────────────────────────────────────── */
     .auth-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -101,7 +81,6 @@
       position: relative;
     }
 
-    /* Glowing green line at the very top of the card */
     .auth-card::before {
       content: '';
       position: absolute;
@@ -110,17 +89,13 @@
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
 
-
-    /* ── TABS (Log In / Sign Up) ─────────────────
-       Two buttons at the top that switch panels.
-       ─────────────────────────────────────────── */
     .auth-tabs {
       display: flex;
       border-bottom: 1px solid var(--border);
     }
 
     .auth-tab {
-      flex: 1;              /* each tab takes equal width */
+      flex: 1;              
       padding: 1rem;
       text-align: center;
       cursor: pointer;
@@ -134,7 +109,6 @@
       transition: all 0.2s;
     }
 
-    /* Active tab gets a green underline */
     .auth-tab.active {
       color: var(--accent);
       border-bottom-color: var(--accent);
@@ -146,10 +120,6 @@
       background: var(--surface2);
     }
 
-
-    /* ── FORM BODY ───────────────────────────────
-       The form area inside each panel.
-       ─────────────────────────────────────────── */
     .auth-body {
       padding: 2rem;
     }
@@ -167,16 +137,12 @@
       margin-bottom: 1.75rem;
     }
 
-
-    /* ── FORM GROUP & LABEL ──────────────────────
-       Wrapper for each label + input pair.
-       ─────────────────────────────────────────── */
     .form-group {
       margin-bottom: 1.1rem;
     }
 
     .form-label {
-      display: block;       /* make it full width so input goes below it */
+      display: block;       
       font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
@@ -184,7 +150,6 @@
       letter-spacing: 0.3px;
     }
 
-    /* The text input field */
     .form-input {
       width: 100%;
       padding: 0.7rem 1rem;
@@ -198,7 +163,6 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    /* Highlight the input when the user clicks on it */
     .form-input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(0,229,160,.1);
@@ -208,14 +172,12 @@
       color: var(--muted);
     }
 
-    /* Two inputs side by side (First Name / Last Name) */
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
     }
 
-    /* "Forgot password?" link floated right of the label */
     .forgot {
       font-size: 0.78rem;
       color: var(--accent);
@@ -227,10 +189,6 @@
       text-decoration: underline;
     }
 
-
-    /* ── SUBMIT BUTTON ───────────────────────────
-       The main "Log In" / "Create Account" button.
-       ─────────────────────────────────────────── */
     .submit-btn {
       width: 100%;
       padding: 0.85rem;
@@ -252,11 +210,6 @@
       box-shadow: 0 0 24px rgba(0,229,160,.35);
     }
 
-
-    /* ── DIVIDER TEXT ("or continue with") ───────
-       A horizontal line with centered text.
-       The ::before and ::after add the lines.
-       ─────────────────────────────────────────── */
     .divider-text {
       text-align: center;
       position: relative;
@@ -265,7 +218,6 @@
       color: var(--muted);
     }
 
-    /* Left line */
     .divider-text::before {
       content: '';
       position: absolute;
@@ -276,7 +228,6 @@
       background: var(--border);
     }
 
-    /* Right line */
     .divider-text::after {
       content: '';
       position: absolute;
@@ -287,10 +238,6 @@
       background: var(--border);
     }
 
-
-    /* ── OAUTH BUTTONS (GitHub / Google) ─────────
-       Social login buttons in a 2-column grid.
-       ─────────────────────────────────────────── */
     .oauth-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -319,10 +266,6 @@
       background: var(--surface);
     }
 
-
-    /* ── SKILL CHIPS (Beginner/Intermediate/etc.) ─
-       Selectable level chips on the sign-up form.
-       ─────────────────────────────────────────── */
     .skill-section {
       margin-top: 1.25rem;
     }
@@ -353,15 +296,12 @@
       font-family: 'Inter', sans-serif;
     }
 
-    /* Selected state for level chips */
     .skill-chip.selected {
       background: rgba(0,229,160,.1);
       border-color: rgba(0,229,160,.4);
       color: var(--accent);
     }
 
-
-    /* "Don't have an account?" link at the bottom */
     .bottom-link {
       text-align: center;
       margin-top: 1.5rem;
@@ -378,11 +318,6 @@
       text-decoration: underline;
     }
 
-
-    /* ── PANEL SWITCHING ─────────────────────────
-       Only the panel with class="active" is shown.
-       JavaScript toggles this class on tab click.
-       ─────────────────────────────────────────── */
     .panel {
       display: none;
     }
@@ -394,33 +329,20 @@
   </style>
 </head>
 <body>
-
-  <!-- Background decorative elements -->
   <div class="bg-grid"></div>
   <div class="bg-glow1"></div>
   <div class="bg-glow2"></div>
-
-  <!-- The login card wrapper -->
   <div class="auth-wrap">
-
-    <!-- Logo above the card -->
     <a href="index.html" class="auth-logo">
       <span class="bracket">{</span> Algo Arena <span class="bracket">}</span>
     </a>
-
-    <!-- The card itself -->
     <div class="auth-card">
-
-      <!-- Tab buttons: "Log In" and "Sign Up" -->
       <div class="auth-tabs">
-        <!-- onclick calls a JS function to switch panels -->
         <button class="auth-tab active" onclick="switchTab('login', this)">Log In</button>
         <button class="auth-tab"        onclick="switchTab('signup', this)">Sign Up</button>
       </div>
 
-
-      <!-- ── LOGIN PANEL ─── -->
-      <!-- id="panel-login" so JS can find and show/hide it -->
+<!-- ── LOGIN PANEL ─── -->
       <div class="auth-body panel active" id="panel-login">
 
         <h2>Welcome back 👋</h2>
@@ -429,7 +351,7 @@
         <!-- Email / Username field -->
         <div class="form-group">
           <label class="form-label">Email or Username</label>
-          <input type="text" class="form-input" placeholder="you@example.com"/>
+          <input type="text" class="form-input" placeholder="you@example.com" oninput="validateLoginLive()"/>
         </div>
 
         <!-- Password field -->
@@ -438,12 +360,13 @@
             Password
             <a href="#" class="forgot">Forgot password?</a>
           </label>
-          <input type="password" class="form-input" placeholder="••••••••"/>
+          <input type="password" class="form-input" placeholder="••••••••" oninput="validateLoginLive()"/>
+          <div id="login-error" style="color: red; font-size: 0.8rem;"></div>
         </div>
 
         <!-- Submit button wrapped in <a> to navigate to profile page -->
         <a href="profile.html">
-          <button class="submit-btn">Log In →</button>
+          <button class="submit-btn" onclick="validateLogin()">Log In →</button>
         </a>
 
         <div class="divider-text">or continue with</div>
@@ -472,29 +395,28 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">First Name</label>
-            <input type="text" class="form-input" placeholder="Ravi"/>
+            <input type="text" class="form-input" placeholder="First Name" oninput="validateSignupLive()"/>
           </div>
           <div class="form-group">
             <label class="form-label">Last Name</label>
-            <input type="text" class="form-input" placeholder="Sharma"/>
+            <input type="text" class="form-input" placeholder="Last Name" oninput="validateSignupLive()"/>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Username</label>
-          <input type="text" class="form-input" placeholder="ravi_codes"/>
+          <input type="text" class="form-input" placeholder="Username" oninput="validateSignupLive()"/>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email</label>
-          <!-- type="email" gives mobile users a keyboard with @ key -->
-          <input type="email" class="form-input" placeholder="you@example.com"/>
+          <input type="email" class="form-input" placeholder="you@example.com"/ oninput="validateSignupLive()">
         </div>
 
         <div class="form-group">
           <label class="form-label">Password</label>
-          <!-- type="password" hides the characters -->
-          <input type="password" class="form-input" placeholder="At least 8 characters"/>
+          <input type="password" class="form-input" placeholder="At least 8 characters" oninput="validateSignupLive()"/>
+          <div id="signup-error" style="color: red;font-size: 0.8rem;"></div>
         </div>
 
         <!-- Skill level picker -->
@@ -509,7 +431,7 @@
         </div>
 
         <a href="profile.html" style="display: block; margin-top: 1.25rem;">
-          <button class="submit-btn">Create Account →</button>
+          <button class="submit-btn" onclick="validateSignup()">Create Account →</button>
         </a>
 
         <div class="divider-text">or sign up with</div>
@@ -529,68 +451,128 @@
   </div>
 
 
-  <!-- ── JAVASCRIPT ─────────────────────────────
-       Small scripts for the tab switching and
-       skill chip selection.
-       Note: In a real project this would live in
-       a separate script.js file.
-       ─────────────────────────────────────────── -->
+  
   <script>
 
-    /**
-     * switchTab(panelName, clickedTab)
-     * Called when user clicks Log In or Sign Up tab.
-     * 1. Removes "active" from all tabs
-     * 2. Adds "active" to the clicked tab
-     * 3. Hides all panels
-     * 4. Shows the target panel
-     */
-    function switchTab(panelName, clickedTab) {
-      /* Remove active from all tabs */
-      document.querySelectorAll('.auth-tab').forEach(function(tab) {
-        tab.classList.remove('active');
-      });
+    /* LOGIN VALIDATION */
+function validateLogin() {
+  const inputs = document.querySelectorAll('#panel-login .form-input');
+  const username = inputs[0].value.trim();
+  const password = inputs[1].value.trim();
+  const errorBox = document.getElementById('login-error');
 
-      /* Add active to the tab that was clicked */
-      clickedTab.classList.add('active');
+  if (!username || !password) {
+    errorBox.textContent = "⚠️ Please fill all fields.";
+    return;
+  }
 
-      /* Hide all panels */
-      document.querySelectorAll('.panel').forEach(function(panel) {
-        panel.classList.remove('active');
-      });
+  if (password.length < 6) {
+    errorBox.textContent = "⚠️ Password must be at least 6 characters.";
+    return;
+  }
 
-      /* Show the matching panel */
-      document.getElementById('panel-' + panelName).classList.add('active');
-    }
+  errorBox.textContent = "";
+  window.location.href = "profile.html";
+}
 
-    /**
-     * switchTabByName(panelName)
-     * Called from bottom links ("Sign up free" / "Log in").
-     * Finds the tab button by its text and clicks it.
-     */
-    function switchTabByName(panelName) {
-      var tabs = document.querySelectorAll('.auth-tab');
-      tabs.forEach(function(tab) {
-        if (panelName === 'login'  && tab.textContent.trim() === 'Log In')  switchTab('login',  tab);
-        if (panelName === 'signup' && tab.textContent.trim() === 'Sign Up') switchTab('signup', tab);
-      });
-    }
 
-    /**
-     * selectSkill(clickedChip)
-     * When a skill chip is clicked:
-     * 1. Remove "selected" from all chips
-     * 2. Add "selected" to the clicked chip
-     */
-    function selectSkill(clickedChip) {
-      /* Deselect all chips in the same group */
-      document.querySelectorAll('.skill-chip').forEach(function(chip) {
-        chip.classList.remove('selected');
-      });
+/* SIGNUP VALIDATION */
+function validateSignup() {
+  const inputs = document.querySelectorAll('#panel-signup .form-input');
 
-      /* Select the clicked chip */
-      clickedChip.classList.add('selected');
-    }
+  const firstName = inputs[0].value.trim();
+  const lastName  = inputs[1].value.trim();
+  const username  = inputs[2].value.trim();
+  const email     = inputs[3].value.trim();
+  const password  = inputs[4].value.trim();
+
+  const selectedSkill = document.querySelector('.skill-chip.selected');
+  const errorBox = document.getElementById('signup-error');
+
+  if (!firstName || !lastName || !username || !email || !password) {
+    errorBox.textContent = "⚠️ Please fill all fields.";
+    return;
+  }
+
+  /* EMAIL */
+  if (!email.includes('@')) {
+    errorBox.textContent = "⚠️ Email must contain '@'.";
+    return;
+  }
+
+  if (!email.includes('.')) {
+    errorBox.textContent = "⚠️ Email must contain '.'.";
+    return;
+  }
+
+  const parts = email.split('@');
+  if (parts[0] === "" || parts[1] === "") {
+    errorBox.textContent = "⚠️ Invalid email format.";
+    return;
+  }
+
+  /* PASSWORD */
+  if (password.length < 8) {
+    errorBox.textContent = "⚠️ Minimum 8 characters required.";
+    return;
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    errorBox.textContent = "⚠️ Add a CAPITAL letter.";
+    return;
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errorBox.textContent = "⚠️ Add a small letter.";
+    return;
+  }
+
+  if (!/[0-9]/.test(password)) {
+    errorBox.textContent = "⚠️ Add a number.";
+    return;
+  }
+
+  if (!/[!@#$%^&*]/.test(password)) {
+    errorBox.textContent = "⚠️ Add a special character.";
+    return;
+  }
+
+  if (!selectedSkill) {
+    errorBox.textContent = "⚠️ Select your level.";
+    return;
+  }
+
+  errorBox.textContent = "";
+  window.location.href = "profile.html";
+}
+
+
+/* LIVE VALIDATION */
+function validateSignupLive() {
+  const inputs = document.querySelectorAll('#panel-signup .form-input');
+
+  const email = inputs[3].value.trim();
+  const password = inputs[4].value.trim();
+  const errorBox = document.getElementById('signup-error');
+
+  let messages = [];
+
+  if (email) {
+    if (!email.includes('@')) messages.push("Missing '@'");
+    if (!email.includes('.')) messages.push("Missing '.'");
+  }
+
+  if (password) {
+    if (password.length < 8) messages.push("Min 8 chars");
+    if (!/[A-Z]/.test(password)) messages.push("1 capital");
+    if (!/[a-z]/.test(password)) messages.push("1 small");
+    if (!/[0-9]/.test(password)) messages.push("1 number");
+    if (!/[!@#$%^&*]/.test(password)) messages.push("1 special");
+  }
+
+  errorBox.innerHTML = messages.length ? "⚠️ " + messages.join("<br>") : "";
+}
+    
 
   </script>
 
