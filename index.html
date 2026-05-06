@@ -408,5 +408,49 @@
   </div>
 </footer>
 
+<script>
+
+function animateNumber(element, finalNumber) {
+    let current = 0;
+
+    let interval = setInterval(() => {
+        current += Math.ceil(finalNumber / 50);
+
+        if (current >= finalNumber) {
+            current = finalNumber;
+            clearInterval(interval);
+        }
+
+        element.textContent = current + "+";
+    }, 30);
+}
+animateNumber(document.querySelector("#stat-members"), 12000);
+animateNumber(document.querySelector("#stat-problems"), 3400);
+animateNumber(document.querySelector("#stat-solutions"), 98000);
+
+const exploreBtn = document.querySelector(".btn-primary");
+exploreBtn.addEventListener("click", function () {
+    alert("🚀 Let's start solving problems!");
+});
+
+document.body.addEventListener("click", function (e) {
+
+    if (e.target.classList.contains("vote-btn")) {
+
+        let text = e.target.textContent;
+        let number = parseInt(text.replace(/\D/g, "")); 
+
+        if (e.target.classList.contains("up")) {
+            number++;
+            e.target.textContent = "▲ " + number;
+        } else {
+            number--;
+            e.target.textContent = "▼ " + number;
+        }
+    }
+
+});
+</script>
+
 </body>
 </html>

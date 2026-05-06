@@ -347,5 +347,58 @@
   </div>
 </footer>
 
+<script>
+
+  // 1. select elements
+const rows = document.querySelectorAll(".problem-row");
+const searchInput = document.querySelector(".search-bar input");
+const filterButtons = document.querySelectorAll(".diff-chip");
+
+// 2.search
+searchInput.addEventListener("input", () => {
+
+  const text = searchInput.value.toLowerCase();
+
+  rows.forEach(row => {
+    const title = row.querySelector(".row-title").textContent.toLowerCase();
+
+    if (title.includes(text)) {
+      row.style.display = "grid";   
+    } else {
+      row.style.display = "none";   
+    }
+  });
+
+});
+
+
+
+  //  3. FILTER (Easy / Medium / Hard)
+filterButtons.forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    const level = btn.dataset.diff;
+
+    rows.forEach(row => {
+      const difficulty = row.querySelector(".difficulty").textContent.toLowerCase();
+
+      if (level === "" || difficulty === level) {
+        row.style.display = "grid";   // show
+      } else {
+        row.style.display = "none";   // hide
+      }
+    });
+
+    // Active button highlight
+    filterButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+  });
+
+});
+
+</script>
+
 </body>
 </html>
