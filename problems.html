@@ -165,10 +165,10 @@
     </div>
     <div style="max-width:1200px;margin:0 auto;padding:0 2.5rem 0">
       <div class="filter-row">
-        <button class="filter-chip active">All</button>
-        <button class="filter-chip active easy">Easy</button>
-        <button class="filter-chip medium">Medium</button>
-        <button class="filter-chip hard">Hard</button>
+       <button class="filter-chip active" data-diff="">All</button>
+  <button class="filter-chip" data-diff="easy">Easy</button>
+  <button class="filter-chip" data-diff="medium">Medium</button>
+  <button class="filter-chip" data-diff="hard">Hard</button> 
         <button class="filter-chip">Array</button>
         <button class="filter-chip">String</button>
         <button class="filter-chip">Tree</button>
@@ -349,52 +349,66 @@
 
 <script>
 
-  // 1. select elements
+
+// 1. SELECT ELEMENTS
+
 const rows = document.querySelectorAll(".problem-row");
 const searchInput = document.querySelector(".search-bar input");
-const filterButtons = document.querySelectorAll(".diff-chip");
+const filterButtons = document.querySelectorAll(".filter-chip");
 
-// 2.search
-searchInput.addEventListener("input", () => {
 
-  const text = searchInput.value.toLowerCase();
 
-  rows.forEach(row => {
-    const title = row.querySelector(".row-title").textContent.toLowerCase();
+// 2. SEARCH FUNCTION
 
-    if (title.includes(text)) {
-      row.style.display = "grid";   
-    } else {
-      row.style.display = "none";   
-    }
-  });
+
+searchInput.addEventListener("input", function () {
+
+    const text = searchInput.value.toLowerCase();
+
+    rows.forEach(function(row) {
+
+        const title = row.querySelector(".row-title").textContent.toLowerCase();
+
+        if (title.includes(text)) {
+            row.style.display = "grid";   // show row
+        } else {
+            row.style.display = "none";   // hide row
+        }
+
+    });
 
 });
 
 
 
-  //  3. FILTER (Easy / Medium / Hard)
-filterButtons.forEach(btn => {
+// 3. FILTER FUNCTION
 
-  btn.addEventListener("click", () => {
+filterButtons.forEach(function(button) {
 
-    const level = btn.dataset.diff;
+    button.addEventListener("click", function () {
 
-    rows.forEach(row => {
-      const difficulty = row.querySelector(".difficulty").textContent.toLowerCase();
+        const level = button.getAttribute("data-diff");
 
-      if (level === "" || difficulty === level) {
-        row.style.display = "grid";   // show
-      } else {
-        row.style.display = "none";   // hide
-      }
+        rows.forEach(function(row) {
+
+            const difficulty = row.querySelector(".difficulty").textContent.toLowerCase();
+
+            if (level === "" || difficulty === level) {
+                row.style.display = "grid";   // show
+            } else {
+                row.style.display = "none";   // hide
+            }
+
+        });
+
+        // Active button highlight
+        filterButtons.forEach(function(btn){
+            btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
     });
-
-    // Active button highlight
-    filterButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-  });
 
 });
 
