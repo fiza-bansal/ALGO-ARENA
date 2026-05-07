@@ -17,7 +17,7 @@
       align-items: center;       /* vertical center */
       justify-content: center;   /* horizontal center */
       min-height: 100vh;
-      overflow: hidden;          /* hide background elements that overflow */
+      overflow-y: auto;          /* hide background elements that overflow */
     }
 
 
@@ -96,7 +96,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      overflow: hidden;
+      overflow: visible;
       box-shadow: 0 40px 80px rgba(0,0,0,.5), var(--card-glow);
       position: relative;
     }
@@ -187,6 +187,7 @@
     /* The text input field */
     .form-input {
       width: 100%;
+      box-sizing: border-box;
       padding: 0.7rem 1rem;
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -389,7 +390,22 @@
 
     .panel.active {
       display: block;
+      overflow: visible;
     }
+
+    .error-msg {
+  color: #ff4d6d;
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+  display: none;        /* hidden by default, JS shows it */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input.invalid {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.15);
+}
 
   </style>
 </head>
@@ -429,7 +445,9 @@
         <!-- Email / Username field -->
         <div class="form-group">
           <label class="form-label">Email or Username</label>
-          <input type="text" class="form-input" placeholder="you@example.com"/>
+          <input type="text" class="form-input" id="login-email" placeholder="you@example.com"/>
+            <span class="error-msg" id="err-login-email">Please enter your email or username.</span>
+
         </div>
 
         <!-- Password field -->
@@ -438,13 +456,15 @@
             Password
             <a href="#" class="forgot">Forgot password?</a>
           </label>
-          <input type="password" class="form-input" placeholder="••••••••"/>
+          <input type="password" class="form-input" id="login-password" placeholder="••••••••"/>
+            <span class="error-msg" id="err-login-password">Please enter your password.</span>
+
         </div>
 
         <!-- Submit button wrapped in <a> to navigate to profile page -->
-        <a href="profile.html">
-          <button class="submit-btn">Log In →</button>
-        </a>
+        
+          <button class="submit-btn" onclick="handleLogin()">Log In →</button>
+        
 
         <div class="divider-text">or continue with</div>
 
@@ -472,29 +492,39 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">First Name</label>
-            <input type="text" class="form-input" placeholder="Ravi"/>
+            <input type="text" class="form-input" id="signup-firstname" placeholder="First Name"/>
+            <span class="error-msg" id="err-signup-firstname">First name is required.</span>
+
           </div>
           <div class="form-group">
             <label class="form-label">Last Name</label>
-            <input type="text" class="form-input" placeholder="Sharma"/>
+            <input type="text" class="form-input" id="signup-lastname" placeholder="Last Name"/>
+            <span class="error-msg" id="err-signup-lastname">Last name is required.</span>
+
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Username</label>
-          <input type="text" class="form-input" placeholder="ravi_codes"/>
+          <input type="text" class="form-input" id="signup-username" placeholder="Username"/>
+          <span class="error-msg" id="err-signup-username">Username must be at least 3 characters.</span>
+
         </div>
 
         <div class="form-group">
           <label class="form-label">Email</label>
           <!-- type="email" gives mobile users a keyboard with @ key -->
-          <input type="email" class="form-input" placeholder="you@example.com"/>
+          <input type="email" class="form-input" id="signup-email" placeholder="you@example.com"/>
+          <span class="error-msg" id="err-signup-email">Please enter a valid email address.</span>
+
         </div>
 
         <div class="form-group">
           <label class="form-label">Password</label>
           <!-- type="password" hides the characters -->
-          <input type="password" class="form-input" placeholder="At least 8 characters"/>
+          <input type="password" class="form-input" id="signup-password" placeholder="At least 8 characters"/>
+          <span class="error-msg" id="err-signup-password">Password must be at least 8 characters.</span>
+
         </div>
 
         <!-- Skill level picker -->
@@ -508,9 +538,9 @@
           </div>
         </div>
 
-        <a href="profile.html" style="display: block; margin-top: 1.25rem;">
-          <button class="submit-btn">Create Account →</button>
-        </a>
+        
+          <button class="submit-btn" style="margin-top: 1.25rem;" onclick="handleSignup()">Create Account →</button>
+        
 
         <div class="divider-text">or sign up with</div>
 
@@ -586,6 +616,117 @@
       /* Select the clicked chip */
       clickedChip.classList.add('selected');
     }
+
+    // ── HELPER FUNCTIONS ──────────────────────────────────────
+
+// Shows an error message below an input and marks it red
+function showError(inputId, errorId) {
+  document.getElementById(inputId).classList.add('invalid');
+  document.getElementById(errorId).style.display = 'block';
+}
+
+// Clears the error from an input
+function clearError(inputId, errorId) {
+  document.getElementById(inputId).classList.remove('invalid');
+  document.getElementById(errorId).style.display = 'none';
+}
+
+// Checks if a string is a valid email format
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+
+// ── LOGIN VALIDATION ──────────────────────────────────────
+
+function handleLogin() {
+  var email    = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value.trim();
+  var isValid  = true;
+
+  // Clear previous errors first
+  clearError('login-email',    'err-login-email');
+  clearError('login-password', 'err-login-password');
+
+  // Check email/username
+  // Check if empty
+if (email === '') {
+  document.getElementById('err-login-email').textContent = 'Please enter your email or username.';
+  showError('login-email', 'err-login-email');
+  isValid = false;
+}
+// Check if it looks like an email (has @) but is invalid
+else if (email.includes('@') && !isValidEmail(email)) {
+  document.getElementById('err-login-email').textContent = 'Please enter a valid email address.';
+  showError('login-email', 'err-login-email');
+  isValid = false;
+}
+
+  // Check password
+  if (password === '') {
+    showError('login-password', 'err-login-password');
+    isValid = false;
+  }
+
+  // If everything is valid, go to profile page
+  if (isValid) {
+    window.location.href = 'profile.html';
+  }
+}
+
+
+// ── SIGNUP VALIDATION ─────────────────────────────────────
+
+function handleSignup() {
+  var firstName = document.getElementById('signup-firstname').value.trim();
+  var lastName  = document.getElementById('signup-lastname').value.trim();
+  var username  = document.getElementById('signup-username').value.trim();
+  var email     = document.getElementById('signup-email').value.trim();
+  var password  = document.getElementById('signup-password').value.trim();
+  var isValid   = true;
+
+  // Clear previous errors first
+  clearError('signup-firstname', 'err-signup-firstname');
+  clearError('signup-lastname',  'err-signup-lastname');
+  clearError('signup-username',  'err-signup-username');
+  clearError('signup-email',     'err-signup-email');
+  clearError('signup-password',  'err-signup-password');
+
+  // Check first name
+  if (firstName === '') {
+    showError('signup-firstname', 'err-signup-firstname');
+    isValid = false;
+  }
+
+  // Check last name
+  if (lastName === '') {
+    showError('signup-lastname', 'err-signup-lastname');
+    isValid = false;
+  }
+
+  // Check username (at least 3 characters)
+  if (username.length < 3) {
+    showError('signup-username', 'err-signup-username');
+    isValid = false;
+  }
+
+  // Check email format
+  if (!isValidEmail(email)) {
+    showError('signup-email', 'err-signup-email');
+    isValid = false;
+  }
+
+  // Check password (at least 8 characters)
+  if (password.length < 8) {
+    showError('signup-password', 'err-signup-password');
+    isValid = false;
+  }
+
+  // If everything is valid, go to profile page
+  if (isValid) {
+    window.location.href = 'profile.html';
+  }
+}
 
   </script>
 
