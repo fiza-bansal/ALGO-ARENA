@@ -316,5 +316,107 @@
   </div>
 </footer>
 
+<script>
+
+
+  // =========================
+  // SHOW ALERT WHEN CLICKING USER
+  // =========================
+
+  const users = document.querySelectorAll('.user-name');
+
+  users.forEach(user => {
+
+    user.addEventListener('click', () => {
+
+      alert("Viewing profile of " + user.textContent);
+
+    });
+
+  });
+
+
+
+  // =========================
+  // PODIUM HOVER EFFECT
+  // =========================
+
+  const podiumItems = document.querySelectorAll('.podium-item');
+
+  podiumItems.forEach(item => {
+
+    item.addEventListener('mouseenter', () => {
+
+      item.style.transform = 'scale(1.05)';
+
+    });
+
+    item.addEventListener('mouseleave', () => {
+
+      item.style.transform = 'scale(1)';
+
+    });
+
+  });
+
+
+
+  // =========================
+  // RANDOM XP GENERATOR BUTTON
+  // =========================
+
+  // Create button
+  const button = document.createElement('button');
+
+  // Button text
+  button.textContent = 'Generate Random XP';
+
+  // Button styling
+  button.style.padding = '10px 16px';
+  button.style.marginTop = '20px';
+  button.style.border = 'none';
+  button.style.borderRadius = '6px';
+  button.style.cursor = 'pointer';
+
+  // Add button to page
+  document.querySelector('.page-header-inner').appendChild(button);
+
+
+
+  // Button click event
+  button.addEventListener('click', () => {
+
+    const xpCells = document.querySelectorAll('.xp-cell');
+
+    xpCells.forEach(cell => {
+
+      // Random XP number
+      const randomXP = Math.floor(Math.random() * 5000);
+
+      // Update text
+      cell.textContent = randomXP + ' XP';
+
+    });
+
+  });
+
+
+
+  // =========================
+  // CHANGE PAGE TITLE
+  // =========================
+
+  document.title = "Algo Arena Leaderboard";
+
+
+
+  // =========================
+  // CONSOLE MESSAGE
+  // =========================
+
+  console.log("Leaderboard Page Loaded Successfully");
+
+
+  </script>
 </body>
 </html>

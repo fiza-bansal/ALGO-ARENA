@@ -193,9 +193,9 @@
     </div>
     <div class="profile-tabs">
       <a href="profile.html" class="profile-tab active">Overview</a>
-      <a href="problems.html" class="profile-tab active">Solutions</a>
-      <a href="discussions.html" class="profile-tab active">Discussions</a>
-      <a href="leaderboard.html" class="profile-tab active">Badges</a>
+      <a href="problems.html" class="profile-tab ">Solutions</a>
+      <a href="discussions.html" class="profile-tab ">Discussions</a>
+      <a href="leaderboard.html" class="profile-tab ">Badges</a>
     </div>
   </div>
 
@@ -361,84 +361,54 @@
 </footer>
 
 <script>
-  // Wait for the page to finish loading
 document.addEventListener('DOMContentLoaded', () => {
-  
 
-    // --- 1. TAB SWITCHING LOGIC ---
+    // --- TAB NAVIGATION ---
     const tabs = document.querySelectorAll('.profile-tab');
 
     tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove 'active' class from all tabs
-            tabs.forEach(t => t.classList.remove('active'));
-            
-            // Add 'active' class to the clicked tab
-            tab.classList.add('active');
+        tab.addEventListener('click', (e) => {
+            const text = tab.innerText.trim();
 
-            // Beginner Note: In a real app, you would also hide/show 
-            // different content sections here based on the tab name!
-            console.log("Switched to tab: " + tab.innerText);
-            tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const text = tab.innerText.trim();
-
-        if (text === "Overview") {
-            window.location.href = "profile.html";
-        } 
-        else if (text === "Solutions") {
-            window.location.href = "problems.html"; // or problem-detail.html
-        } 
-        else if (text === "Discussions") {
-            window.location.href = "discussions.html";
-        } 
-        else if (text === "Badges") {
-            window.location.href = "leaderboard.html";
-        }
-
+            if (text === "Overview") {
+                window.location.href = "profile.html";
+            } 
+            else if (text === "Solutions") {
+                window.location.href = "problems.html";
+            } 
+            else if (text === "Discussions") {
+                window.location.href = "discussions.html";
+            } 
+            else if (text === "Badges") {
+                window.location.href = "leaderboard.html";
+            }
+        });
     });
-    });
-});
 
-    // --- 2. FOLLOW BUTTON TOGGLE ---
+    // --- FOLLOW BUTTON ---
     const followBtn = document.querySelector('.btn-outline');
 
-    // Check if the button exists and is the "Follow" button
-    if (followBtn && followBtn.innerText.includes('Follow')) {
+    if (followBtn) {
         followBtn.addEventListener('click', () => {
-            if (followBtn.innerText === '+ Follow') {
-                followBtn.innerText = '✓ Following';
-                followBtn.style.background = 'var(--surface2)';
-                followBtn.style.color = 'var(--text)';
+            if (followBtn.innerText === 'Follow') {
+                followBtn.innerText = 'Following';
             } else {
-                followBtn.innerText = '+ Follow';
-                followBtn.style.background = ''; // Resets to CSS default
-                followBtn.style.color = '';
+                followBtn.innerText = 'Follow';
             }
         });
     }
 
-    // --- 3. DYNAMIC GREETING (BONUS) ---
+    // --- GREETING (RUNS ONLY ONCE) ---
     const profileName = document.querySelector('.profile-name');
-    const now = new Date();
-    const hour = now.getHours();
+
+    const hour = new Date().getHours();
     let greeting = "";
 
     if (hour < 12) greeting = "Good Morning, ";
     else if (hour < 18) greeting = "Good Afternoon, ";
     else greeting = "Good Evening, ";
 
-    console.log(greeting + profileName.innerText + "!");
-    profileName.innerText=greeting+profileName.innerText;
-  
-});
-});
-const currentPage = window.location.pathname;
-
-tabs.forEach(tab => {
-    if (tab.href && currentPage.includes(tab.getAttribute('href'))) {
-        tab.classList.add('active');
-    }
+    profileName.innerText = greeting + profileName.innerText;
 });
 
   </script>
